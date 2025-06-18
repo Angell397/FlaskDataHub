@@ -1,0 +1,26 @@
+ [
+  {
+    "Nombre": "Ana",
+    "Edad": 30,
+    "Ciudad": "Madrid",
+    "Email": "ana@example.com"
+  },
+  {
+    "Nombre": "Luis",
+    "Edad": 25,
+    "Ciudad": "Barcelona",
+    "Email": "luis@example.com"
+  },
+  {
+    "Nombre": "María",
+    "Edad": 28,
+    "Ciudad": "Sevilla",
+    "Email": "maria@example.com"
+  },
+  {
+    "Nombre": "Javier",
+    "Edad": 35,
+    "Ciudad": "Valencia",
+    "Email": "javier@example.com"
+  }
+]

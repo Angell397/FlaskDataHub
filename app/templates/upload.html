@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Subir archivo de datos</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv, .json" required>
+    <button type="submit">Subir</button>
+</form>
+{% endblock %}
