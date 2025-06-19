@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Resumen de {{ filename }}</h2>
+
+<p><strong>Dimensiones:</strong> {{ summary.shape[0] }} filas x {{ summary.shape[1] }} columnas</p>
+
+<h3>Columnas:</h3>
+<ul>
+    {% for col in summary.columnas %}
+        <li>{{ col }} ({{ summary.tipos[col] }})</li>
+    {% endfor %}
+</ul>
+
+<a href="{{ url_for('main.upload_file') }}">Subir otro archivo</a>
+{% endblock %}
