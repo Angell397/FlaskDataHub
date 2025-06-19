@@ -4,16 +4,15 @@ import pandas as pd
 from werkzeug.utils import secure_filename
 from flask import current_app as app
 
+from .models import UploadedFile
+from . import db
+
 main = Blueprint('main', __name__)
 
-ALLOWED_EXTENSIONS = {'csv', 'json'}
+ALLOWED_EXTENSIONS = {'csv', 'json', 'txt'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@main.route('/')
-def index():
-    return render_template('index.html')
 
 @main.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -23,17 +22,19 @@ def upload_file():
             return redirect(request.url)
 
         file = request.files['file']
+
         if file.filename == '':
-            flash('Ningún archivo seleccionado.')
+            flash('No se seleccionó ningún archivo.')
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
+            # ✅ Definimos filename antes del bloque try
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
 
             try:
-                # Procesar CSV o JSON con pandas
+                # ✅ Procesamos el archivo
                 if filename.endswith('.csv') or filename.endswith('.txt'):
                     df = pd.read_csv(filepath)
                 else:
@@ -45,13 +46,23 @@ def upload_file():
                     "tipos": df.dtypes.astype(str).to_dict()
                 }
 
+                # ✅ Guardamos en la base de datos
+                uploaded = UploadedFile(
+                    filename=filename,
+                    num_rows=df.shape[0],
+                    num_columns=df.shape[1]
+                )
+                db.session.add(uploaded)
+                db.session.commit()
+
+                return render_template('summary.html', filename=filename, summary=summary)
+
             except Exception as e:
                 flash(f"Error procesando archivo: {str(e)}")
                 return redirect(url_for('main.upload_file'))
 
-            return render_template('summary.html', filename=filename, summary=summary)
-
-        flash('Formato de archivo no permitido.')
-        return redirect(request.url)
+        else:
+            flash('Formato de archivo no permitido.')
+            return redirect(request.url)
 
     return render_template('upload.html')
