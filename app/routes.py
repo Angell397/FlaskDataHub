@@ -14,6 +14,16 @@ ALLOWED_EXTENSIONS = {'csv', 'json', 'txt'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@main.route('/')
+def index():
+    return render_template('index.html')
+
+@main.route('/historial')
+def historial():
+    archivos = UploadedFile.query.order_by(UploadedFile.timestamp.desc()).all()
+    return render_template('historial.html', archivos=archivos)
+
+
 @main.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -66,3 +76,4 @@ def upload_file():
             return redirect(request.url)
 
     return render_template('upload.html')
+    

@@ -2,13 +2,35 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>DataFlow</title>
+    <title>{% block title %}DataFlow{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <header><h1>DataFlow</h1></header>
+    <header>
+        <h1>📊 DataFlow</h1>
+        <nav>
+            <a href="{{ url_for('main.index') }}">Inicio</a>
+            <a href="{{ url_for('main.upload_file') }}">Subir archivo</a>
+            <a href="{{ url_for('main.historial') }}">Historial</a>
+        </nav>
+    </header>
+
     <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </main>
+
+    <footer>
+        <p>Desarrollado por Angel Amaya – Proyecto Demo Full Stack</p>
+    </footer>
 </body>
 </html>
