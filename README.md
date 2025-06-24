@@ -18,7 +18,7 @@ Esta herramienta está diseñada para ser útil en **contextos educativos**, **e
 
 ---
 
-## 🚧 Funcionalidades en desarrollo
+## 🚧 Posibles futuruas funcionalidades
 
 🗂️ Gestión avanzada del historial: vista individual, eliminar archivo, exportar  
 🔐 Autenticación de usuarios con Flask-Login  
