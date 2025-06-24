@@ -20,9 +20,8 @@ def index():
 
 @main.route('/historial')
 def historial():
-    archivos = UploadedFile.query.order_by(UploadedFile.timestamp.desc()).all()
+    archivos = UploadedFile.query.order_by(UploadedFile.upload_date.desc()).all()
     return render_template('historial.html', archivos=archivos)
-
 
 @main.route('/upload', methods=['GET', 'POST'])
 def upload_file():

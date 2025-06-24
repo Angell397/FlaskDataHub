@@ -1,15 +1,32 @@
 {% extends 'base.html' %}
 
+{% block title %}Historial{% endblock %}
+
 {% block content %}
-<h2>Historial de archivos subidos</h2>
-<ul>
-    {% for archivo in archivos %}
-        <li>
-            {{ archivo.filename }} — {{ archivo.num_rows }} filas, {{ archivo.num_columns }} columnas — {{ archivo.upload_date.strftime('%d/%m/%Y %H:%M') }}
-        </li>
-    {% else %}
-        <li>No hay archivos todavía.</li>
-    {% endfor %}
-</ul>
-<a href="{{ url_for('main.upload_file') }}">Subir nuevo archivo</a>
+<h2>📁 Historial de archivos subidos</h2>
+
+{% if archivos %}
+<table>
+    <thead>
+        <tr>
+            <th>Archivo</th>
+            <th>Fecha de subida</th>
+            <th>Filas</th>
+            <th>Columnas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for archivo in archivos %}
+        <tr>
+            <td>{{ archivo.filename }}</td>
+            <td>{{ archivo.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td>{{ archivo.num_rows }}</td>
+            <td>{{ archivo.num_columns }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No se han subido archivos todavía.</p>
+{% endif %}
 {% endblock %}
