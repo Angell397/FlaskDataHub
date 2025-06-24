@@ -7,6 +7,7 @@ def create_app():
     app = Flask(__name__)
 
     # Configuración de la base de datos
+    app.config['SECRET_KEY'] = 'superclave-secreta-angel-2025'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataflow.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = 'app/uploads'

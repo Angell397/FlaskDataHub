@@ -7,16 +7,19 @@
 
 {% if archivos %}
 <table>
+
     <thead>
         <tr>
             <th>Archivo</th>
             <th>Fecha de subida</th>
             <th>Filas</th>
             <th>Columnas</th>
+           
         </tr>
     </thead>
     <tbody>
         {% for archivo in archivos %}
+        <td><a href="{{ url_for('main.ver_detalle', archivo_id=archivo.id) }}">Ver</a></td>
         <tr>
             <td>{{ archivo.filename }}</td>
             <td>{{ archivo.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>

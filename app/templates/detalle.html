@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Detalles del archivo: {{ archivo.filename }}</h2>
+
+<h3>Vista previa (primeras filas)</h3>
+<div>{{ preview|safe }}</div>
+
+<h3>Estadísticas básicas</h3>
+<div>{{ stats|safe }}</div>
+
+<h3>Visualización de la columna: {{ col }}</h3>
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels | tojson }},
+            datasets: [{
+                label: '{{ col }}',
+                data: {{ chart_values | tojson }},
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

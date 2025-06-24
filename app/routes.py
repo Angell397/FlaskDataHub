@@ -76,3 +76,42 @@ def upload_file():
 
     return render_template('upload.html')
     
+@main.route('/archivo/<int:archivo_id>')
+def ver_detalle(archivo_id):
+    archivo = UploadedFile.query.get_or_404(archivo_id)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename)
+
+    try:
+        # Cargar archivo
+        if archivo.filename.endswith('.csv') or archivo.filename.endswith('.txt'):
+            df = pd.read_csv(filepath)
+        else:
+            df = pd.read_json(filepath)
+
+        # Obtener primeras filas
+        preview = df.head(10).to_html(classes='tabla', index=False)
+
+        # Obtener estadísticas
+        stats = df.describe().to_html(classes='tabla', index=True)
+
+        # Generar datos para un gráfico
+        # Elegimos la primera columna categórica o numérica
+        col = df.select_dtypes(include=['object', 'int', 'float']).columns[0]
+        chart_data = df[col].value_counts().head(5)
+
+        labels = [str(label) for label in chart_data.index]
+        values = [int(value) for value in chart_data.values]
+
+        return render_template(
+            'detalle.html',
+            archivo=archivo,
+            preview=preview,
+            stats=stats,
+            chart_labels=labels,
+            chart_values=values,
+            col=col
+        )
+
+    except Exception as e:
+        flash(f"Error al procesar el archivo: {e}")
+        return redirect(url_for('main.historial'))
